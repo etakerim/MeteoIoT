@@ -1,37 +1,34 @@
-import sqlite3
-import datetime
+from sqlalchemy import Column, Integer, Float, DateTime, String, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy import create_engine
+from sqlalchemy.sql import func
+
+Base = declarative_base()
 
 
-class Weather:
-    DB_NAME = 'weather.db'
-    def __init__(self, location):
-        self.table = location
-        self.db = sqlite3.connect(self.DB_NAME)
-        self.create_tables()
+class Weather(Base):
+    __tablename__ = 'weather'
 
-    def create_tables(self):
-        c = self.db.cursor()
-        c.execute("""CREATE TABLE IF NOT EXISTS {} (
-                     id INTEGER PRIMARY KEY NOT NULL,
-                     dtm TEXT NOT NULL,
-                     temperature TEXT,
-                     pressure TEXT,
-                     pressure_raw TEXT)""".format(self.table))
-        self.db.commit()
+    id = Column(Integer, primary_key=True)
+    location_id = Column(Integer, ForeignKey('location.id'))
+    dtm = Column(DateTime(timezone=True), server_default=func.now())
+    temperature = Column(Float(asdecimal=True))
+    pressure = Column(Float(asdecimal=True))
 
-    def insert(self, m):
-        c = self.db.cursor()
-        c.execute("""INSERT INTO {}
-                     (dtm, temperature, pressure, pressure_raw)
-                     VALUES (?, ?, ?, ?)""".format(self.table), 
-                     (m['dtm'], m['t'], m['p'], m['p_raw']))
-        self.db.commit()
+    location = relationship("Location")
 
-    def view(self, start=None, end=None):
-        end = end or datetime.datetime.now()
-        start = start or (end - datetime.timedelta(days=30))
 
-        c = self.db.cursor()
-        c.execute("""SELECT * FROM {} WHERE dtm > ? AND dtm < ?""".format(self.table),
-                    (start.isoformat(), end.isoformat()))
-        return c.fetchall()
+class Location(Base):
+    __tablename__ = 'location'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    altitude = Column(Integer)
+
+
+engine = create_engine('sqlite:///meteo.db')  # echo=True
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
