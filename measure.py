@@ -1,22 +1,20 @@
+import os
 import db
-from datetime import datetime
 from sensors.ds18b20 import Thermometer
 from sensors.bmp280 import BMP280
 
-LOCATION = 'bratislava'
-ALTITUDE = 150
-
-database = db.Weather(LOCATION)
+LOCATION = os.environ['LOCATION_ID']
 t = Thermometer()
 p = BMP280()
 
-p.measure()
-date = datetime.now().replace(microsecond=0)
-measurement = {
-        'dtm': date.isoformat(),
-        't': t.temperature,
-        'p': p.mslp_pressure(ALTITUDE),
-        'p_raw': p.pressure
-    }
-database.insert(measurement)
-print(database.view())
+session = db.Session()
+place = session.query(db.Location).get(LOCATION)
+
+p.measure()   # Wake up sensor after inactivity
+p.measure()   # Read actual pressure
+session.add(db.Weather(
+                location_id=LOCATION,
+                temperature=t.temperature,
+                pressure=p.mslp_pressure(place.altitude))
+            )
+session.commit()
