@@ -1,5 +1,7 @@
+import os
 import db
 import config
+import charts
 from sensors.ds18b20 import Thermometer
 from sensors.bmp280 import BMP280
 
@@ -17,3 +19,6 @@ session.add(db.Weather(
                 pressure=p.mslp_pressure(place.altitude))
             )
 session.commit()
+
+charts.plot(*(os.path.join(config.PATH, 'static', g['path'])
+              for g in config.GRAPH_PATHS))
