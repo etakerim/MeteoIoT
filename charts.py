@@ -117,7 +117,6 @@ def statistics(image, stats):
 
     fig.autofmt_xdate()
     ax.grid(True)
-    ax.xaxis.set_major_locator(mdates.DayLocator(interval=7))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     ax.bar(dates, mini, color='#3f9bff')
     ax.bar(dates, maxi, color='#ff3f3f')
