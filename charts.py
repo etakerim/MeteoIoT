@@ -106,13 +106,11 @@ def history(image, interval, hourtick, records=None):
     plt.gcf().clear()
 
 
-def mark_dailyrecords(ax, stats, start, finish):
-    pass
-
-def weather_statistics(image, stats):
-    dates = dt.datetime.strptime(x.dtm, '%Y-%m-%d') for x in stats['avg']]
-    avge = [y.avg for y in stats['avg'],
-    mini = [y.min for y in stats['min']],
+def statistics(image, stats):
+    dates = [dt.datetime.strptime(x.dtm, '%Y-%m-%d')
+             for x in stats['avg']]
+    avge = [y.avg for y in stats['avg']]
+    mini = [y.min for y in stats['min']]
     maxi = [y.max for y in stats['max']]
 
     fig, ax = plt.subplots(1, 1, figsize=(10,5))
