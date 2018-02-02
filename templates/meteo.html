@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" lang="sk"/>
+        <title>Meteo Pi</title>
+        <style>
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        </style>
+    </head>
+    <body>
+        <h1>Meteorologická stanica</h1>
+        <a href="https://github.com/etakerim/meteopi/">Zdrojový kód projektu</a>
+        <br/>
+        <img src="{{url_for('static', filename='logo-meteopi.png')}}" />
+        {% for log in graphs %}
+        <h2>{{log['name']}}</h2>
+        <img src="{{url_for('static', filename=log['path'])}}" alt="{{log['name']}}"/>
+        <br/><br/>
+        {% endfor %}
+    </body>
+</html>
