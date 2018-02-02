@@ -1,6 +1,6 @@
 import db
 import datetime as dt
-from sqlalchemy import DateTime, cast, func
+from sqlalchemy import Date, cast, func
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
@@ -69,7 +69,24 @@ def plot_quantity(ax, title, x, y, recent, period, color, hourtick):
         tick -= dt.timedelta(days=1)
 
 
-def weather_history(image, interval, hourtick, records=None):
+def mark_dailyrecords(ax, stats, start, finish):
+    h = 4
+    for temp in stats['max']:
+        if temp.dtm >= start:
+            linex = [temp.dtm - dt.timedelta(hours=h),
+                     temp.dtm + dt.timedelta(hours=h)]
+            liney = [temp.max, temp.max]
+            ax.plot(linex, liney, color='r')
+
+    for temp in stats['min']:
+        if temp.dtm >= start:
+            linex = [temp.dtm - dt.timedelta(hours=h),
+                     temp.dtm + dt.timedelta(hours=h)]
+            liney = [temp.min, temp.min]
+            ax.plot(linex, liney, color='b')
+
+
+def history(image, interval, hourtick, records=None):
     fig, (tg, pg) = plt.subplots(2, 1, figsize=(10,5))
 
     today = dt.datetime.now().replace(microsecond=0)
