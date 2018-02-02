@@ -126,8 +126,8 @@ def statistics(image, stats):
     plt.gcf().clear()
 
 
-def plot():
+def plot(days3, days10, allstats):
     s = query_stats()
-    history('last-3-days.png', dt.timedelta(days=3), 2, s)
-    history('last-10-days.png', dt.timedelta(days=10), 6)
-    statistics('statistics.png', s)
+    history(days3, dt.timedelta(days=3), 2, s)
+    history(days10, dt.timedelta(days=10), 6)
+    statistics(allstats, s)
