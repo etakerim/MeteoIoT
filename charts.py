@@ -5,14 +5,12 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 
-def query_interval(self, start, finish):
+def query_interval(start, finish):
     session = db.Session()
     data = (session
             .query(db.Weather)
-            .filter((cast(db.Weather.dtm, DateTime) <=
-                     cast(finish, DateTime)) &
-                    (cast(db.Weather.dtm, DateTime) >=
-                     cast(start, DateTime)))
+            .filter((db.Weather.dtm <= finish) &
+                    (db.Weather.dtm >= start))
             .order_by(db.Weather.dtm).all())
 
     return {'dates': [x.dtm for x in data],
