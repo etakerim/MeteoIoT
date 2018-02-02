@@ -127,6 +127,8 @@ def statistics(image, stats):
     plt.gcf().clear()
 
 
-weather_history('last-3-days.png', dt.timedelta(days=3), 2)
-weather_history('last-10-days.png', dt.timedelta(days=10), 6)
-weather_statistics('statistics.png', query_stats())
+def plot():
+    s = query_stats()
+    history('last-3-days.png', dt.timedelta(days=3), 2, s)
+    history('last-10-days.png', dt.timedelta(days=10), 6)
+    statistics('statistics.png', s)
