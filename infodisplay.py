@@ -30,7 +30,7 @@ class Display:
                               callback=self.turn_onoff,
                               bouncetime=300)
         GPIO.add_event_detect(measure_btn, GPIO.FALLING,
-                              callback=lambda ch: self.refresh(),
+                              callback=self.refresh,
                               bouncetime=200)
 
     def turn_onoff(self, channel):
@@ -40,7 +40,6 @@ class Display:
         else:
             self.a_screen.show()
             self.b_screen.show()
-            self.refresh()
         self.disp_on = not self.disp_on
 
     def weather(self, t, p):
