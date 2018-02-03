@@ -1,5 +1,6 @@
 import signal
 import datetime
+import netifaces as ni
 from RPi import GPIO
 from PIL import ImageFont
 from luma.core.interface.serial import i2c
@@ -62,9 +63,9 @@ class Display:
         p.measure()
 
         h = 150
-        ip = '192.168.100.100'
-        mac = 'b8:23:98:2d:1c:f3'
         interface = 'eth0'
+        ip = ni.ifaddresses(interface)[ni.AF_INET][0]['addr']
+        mac = ni.ifaddresses(interface)[ni.AF_LINK][0]['addr']
 
         self.weather(t.temperature, p.mslp_pressure(h))
         self.localnet(interface, ip, mac)
