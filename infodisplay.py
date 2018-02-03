@@ -1,4 +1,5 @@
 import os
+import signal
 import time
 from RPi import GPIO
 from PIL import ImageFont
@@ -7,7 +8,6 @@ from luma.oled.device import ssd1306
 from luma.core.render import canvas
 from sensors.bmp280 import BMP280
 from sensors.ds18b20 import Thermometer
-
 
 class Display:
 
@@ -68,6 +68,4 @@ class Display:
 display = Display()
 display.control_setup(17, 27)
 display.refresh(None)
-
-while True:
-    time.sleep(1)
+signal.pause()
