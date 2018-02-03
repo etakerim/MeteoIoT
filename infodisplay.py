@@ -7,26 +7,26 @@ from luma.core.render import canvas
 
 a_screen = ssd1306(i2c(port=1, address=0x3C))
 b_screen = ssd1306(i2c(port=1, address=0x3D))
-fontsize = 10
+fontsize = 11
 font = ImageFont.truetype('DejaVuSans-Bold.ttf', fontsize)
 
-line = ((10, 1.5 * fontsize), (10,  1.5 * fontsize * 2), (10, 1.5 * fontsize * 3))
-area = 'Bratislava-Rača'
+line = [(5, 2 * fontsize * i) for i in range(3)]
 t = 23.345
 p = 1015.45
 interface = 'eth0'
 ip = '192.168.100.100'
 mac = 'b8:23:98:2d:1c:f3'
 
+style = dict(fill='white', font=font)
 with canvas(a_screen) as draw:
-    draw.text(line[0], 'POĆASIE ({})'.format(area), fill='white', font=font)
-    draw.text(line[1], 't = {:.2f} °C'.format(t), fill='white', font=font)
-    draw.text(line[2], 'p = {:.2f} hPa'.format(p), fill='white', font=font)
+    draw.text(line[0], 'WEATHER', **style)
+    draw.text(line[1], 't = {:.2f} °C'.format(t), **style)
+    draw.text(line[2], 'p = {:.2f} hPa'.format(p), **style)
 
 with canvas(b_screen) as draw:
-    draw.text(line[0], 'Ethernet - {}'.format(interface), fill='white', font=font)
-    draw.text(line[1], ip, fill='white', font=font)
-    draw.text(line[2], mac, fill='white', font=font)
+    draw.text(line[0], 'Ethernet - {}'.format(interface), **style)
+    draw.text(line[1], ip, **style)
+    draw.text(line[2], mac, **style)
 
 while True:
     time.sleep(1)
