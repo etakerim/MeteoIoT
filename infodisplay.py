@@ -1,4 +1,5 @@
 import time
+from RPi import GPIO
 from PIL import ImageFont
 from luma.core.interface.serial import i2c
 from luma.oled.device import ssd1306
@@ -9,6 +10,21 @@ a_screen = ssd1306(i2c(port=1, address=0x3C))
 b_screen = ssd1306(i2c(port=1, address=0x3D))
 fontsize = 11
 font = ImageFont.truetype('DejaVuSans-Bold.ttf', fontsize)
+
+def off(channel):
+    global a_screen
+    a_screen.hide()
+
+def on(channel):
+    global a_screen
+    a_screen.show()
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.add_event_detect(17, GPIO.FALLING, callback=off, bouncetime=200)
+GPIO.add_event_detect(27, GPIO.FALLING, callback=on, bouncetime=200)
+
 
 line = [(5, 2 * fontsize * i) for i in range(3)]
 t = 23.345
