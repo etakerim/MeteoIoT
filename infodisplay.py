@@ -29,7 +29,7 @@ class Display:
                               callback=self.turn_onoff,
                               bouncetime=300)
         GPIO.add_event_detect(measure_btn, GPIO.FALLING,
-                              callback=lambda ch: self.refresh,
+                              callback=lambda ch: self.refresh(),
                               bouncetime=200)
 
     def turn_onoff(self, channel):
