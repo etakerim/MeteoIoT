@@ -1,4 +1,5 @@
 import signal
+import datetime
 from RPi import GPIO
 from PIL import ImageFont
 from luma.core.interface.serial import i2c
@@ -42,8 +43,9 @@ class Display:
         self.disp_on = not self.disp_on
 
     def weather(self, t, p):
+        time = datetime.datetime.now().strftime('%H:%M:%S')
         with canvas(self.a_screen) as draw:
-            draw.text(self.line[0], 'WEATHER', **self.style)
+            draw.text(self.line[0], 'WEATHER {}'.format(time), **self.style)
             draw.text(self.line[1], 't = {:.2f} °C'.format(t), **self.style)
             draw.text(self.line[2], 'p = {:.2f} hPa'.format(p), **self.style)
 
