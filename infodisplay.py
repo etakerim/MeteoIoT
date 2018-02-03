@@ -56,7 +56,7 @@ class Display:
             draw.text(self.line[1], ip, **self.style)
             draw.text(self.line[2], mac, **self.style)
 
-    def refresh(self):
+    def refresh(self, event=None):
         t = Thermometer()
         p = BMP280()
         p.measure()
