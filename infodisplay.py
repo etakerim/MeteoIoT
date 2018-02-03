@@ -63,8 +63,11 @@ class Display:
 
         h = 150
         interface = 'eth0'
-        ip = ni.ifaddresses(interface)[ni.AF_INET][0]['addr']
         mac = ni.ifaddresses(interface)[ni.AF_LINK][0]['addr']
+        try:
+            ip = ni.ifaddresses(interface)[ni.AF_INET][0]['addr']
+        except KeyError:
+            ip = 'Connection closed!'
 
         self.weather(t.temperature, p.mslp_pressure(h))
         self.localnet(interface, ip, mac)
